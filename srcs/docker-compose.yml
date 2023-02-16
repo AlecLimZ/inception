@@ -1,0 +1,76 @@
+version: '3.7'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: requirements/nginx/Dockerfile
+    container_name: nginx
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    networks:
+      - wpnginx
+    volumes:
+      - ./requirements/nginx/conf/:/etc/nginx/http.d/
+      - ./requirements/nginx/tools:/etc/nginx/ssl/
+      - wp-volume:/var/www/
+    restart: always
+
+  mariadb:
+    build:
+      context: .
+      dockerfile: requirements/mariadb/Dockerfile
+      args:
+        DB_NAME: ${MYSQL_DB}
+        DB_USER: ${MYSQL_USER}
+        DB_PASS: ${MYSQL_PASSWORD}
+        DB_ROOT: ${MYSQL_ROOT_PASSWORD}
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    networks:
+      - wpdb
+    volumes:
+      - db-volume:/var/lib/mysql
+    restart: always
+
+  wordpress:
+    build:
+      context: .
+      dockerfile: requirements/wordpress/Dockerfile
+      args:
+        DB_NAME: ${MYSQL_DB}
+        DB_USER: ${MYSQL_USER}
+        DB_PASS: ${MYSQL_PASSWORD}
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    restart: always
+    ports:
+      - "9000:9000"
+    networks:
+      - wpnginx
+      - wpdb
+    volumes:
+      - wp-volume:/var/www/
+
+volumes:
+  wp-volume:
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/${USER}/data/wordpress
+
+  db-volume:
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/${USER}/data/mariadb
+
+networks:
+  wpnginx:
+    driver: bridge
+  wpdb:
+    driver: bridge
