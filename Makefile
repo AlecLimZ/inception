@@ -44,7 +44,7 @@ endif
 	@sudo rm -rf ~/data/wordpress/*
 	@sudo rm -rf ~/data/mariadb/*
 ifneq ($(shell docker volume ls -q),)
-	@docker volume rm $(docker volume ls -q)
+	@docker volume rm $$(docker volume ls -q)
 endif
 
 .PHONY	: all build down re clean fclean
