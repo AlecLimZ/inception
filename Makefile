@@ -41,8 +41,7 @@ endif
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
-	@sudo rm -rf ~/data/wordpress/*
-	@sudo rm -rf ~/data/mariadb/*
+	@sudo rm -rf ~/data
 ifneq ($(shell docker volume ls -q),)
 	@docker volume rm $$(docker volume ls -q)
 endif
