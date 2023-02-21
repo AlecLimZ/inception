@@ -9,7 +9,7 @@ if [ ! -f "/var/www/" ]; then
 fi
 
 if [ ! -f "/var/www/wp-config.php" ]; then
-echo "WORK???LOOOOOOOOOOOOOOOOOOOOOOOOOL"
+echo "Creating wp-config.php ..."
 cat << EOF > /var/www/wp-config.php
 <?php
 define( 'DB_NAME', '${DB_NAME}' );

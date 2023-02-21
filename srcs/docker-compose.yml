@@ -14,9 +14,9 @@ services:
       - wpnginx
     volumes:
       - wp-volume:/var/www/
-    restart: always
 
   mariadb:
+    env_file: ./.env
     build:
       context: .
       dockerfile: requirements/mariadb/Dockerfile
@@ -32,9 +32,9 @@ services:
       - wpdb
     volumes:
       - db-volume:/var/lib/mysql
-    restart: always
 
   wordpress:
+    env_file: ./.env
     build:
       context: .
       dockerfile: requirements/wordpress/Dockerfile
@@ -45,7 +45,6 @@ services:
     container_name: wordpress
     depends_on:
       - mariadb
-    restart: always
     ports:
       - "9000:9000"
     networks:

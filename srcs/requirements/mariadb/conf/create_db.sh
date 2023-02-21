@@ -6,7 +6,7 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
 
         # init database
         mysql_install_db --basedir=/usr --datadir=/var/lib/mysql --user=mysql --rpm
-	echo "Installing MARIADB!"
+	echo "Installing MARIADB files..."
 
         tfile=`mktemp`
         if [ ! -f "$tfile" ]; then
